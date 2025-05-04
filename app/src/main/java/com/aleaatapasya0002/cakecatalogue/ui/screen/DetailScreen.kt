@@ -35,9 +35,10 @@ import androidx.navigation.compose.rememberNavController
 import com.aleaatapasya0002.cakecatalogue.R
 import com.aleaatapasya0002.cakecatalogue.ui.theme.CakeCatalogueTheme
 
+const val KEY_ID_DAFTAR = "idDaftar"
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailScreen(navController: NavHostController) {
+fun DetailScreen(navController: NavHostController, id: Long? = null) {
     var judul by remember { mutableStateOf("") }
     var daftar by remember { mutableStateOf("") }
     Scaffold(
@@ -52,7 +53,11 @@ fun DetailScreen(navController: NavHostController) {
                     }
                 },
                 title = {
-                    Text(text = stringResource(id = R.string.tambah_daftar))
+                    if (id == null) {
+                        Text(text = stringResource(id = R.string.tambah_daftar))
+                    }
+                    else
+                        Text(text = stringResource(id = R.string.edit_daftar))
                 },
                 colors = TopAppBarDefaults.mediumTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,

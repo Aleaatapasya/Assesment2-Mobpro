@@ -6,4 +6,5 @@
     <string name="isi_daftar">Fill in the list</string>
     <string name="kembali">Back</string>
     <string name="simpan">Save</string>
+    <string name="edit_daftar">Edit list</string>
 </resources>

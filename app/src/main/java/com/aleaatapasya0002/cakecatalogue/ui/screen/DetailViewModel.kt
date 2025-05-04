@@ -17,8 +17,19 @@ class DetailViewModel(private val dao: DaftarDao) : ViewModel() {
             dao.insert(daftar)
         }
     }
-    fun getDaftar(id: Long):Daftar? {
-        return null
+    suspend fun getDaftar(id: Long):Daftar? {
+        return dao.getDaftarById(id)
+    }
+
+    fun update(id: Long, namaKue: String, deskripsi: String){
+        val daftar = Daftar(
+            id = id,
+            namaKue = namaKue,
+            deskripsi = deskripsi
+        )
+        viewModelScope.launch(Dispatchers.IO){
+            dao.update(daftar)
+        }
     }
 
 }

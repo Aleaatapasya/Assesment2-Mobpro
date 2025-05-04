@@ -15,6 +15,9 @@ interface DaftarDao {
     @Update
     suspend fun update(daftar: Daftar)
 
-    @Query("SELECT * FROM daftar ORDER BY namaKue ASC")
+    @Query("SELECT * FROM daftar ORDER BY id DESC")
     fun getDaftar(): Flow<List<Daftar>>
+
+    @Query("SELECT * FROM daftar WHERE id = :id")
+    suspend fun getDaftarById(id: Long):Daftar?
 }

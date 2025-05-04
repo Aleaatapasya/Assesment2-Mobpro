@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.aleaatapasya0002.cakecatalogue.ui.screen.MainScreen
+import com.aleaatapasya0002.cakecatalogue.navigation.SetupNavGraph
 import com.aleaatapasya0002.cakecatalogue.ui.theme.CakeCatalogueTheme
 
 class MainActivity : ComponentActivity() {
@@ -13,7 +13,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             CakeCatalogueTheme {
-                MainScreen()
+                SetupNavGraph()
             }
         }
     }

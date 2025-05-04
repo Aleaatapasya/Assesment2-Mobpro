@@ -29,14 +29,17 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.aleaatapasya0002.cakecatalogue.R
 import com.aleaatapasya0002.cakecatalogue.model.Daftar
+import com.aleaatapasya0002.cakecatalogue.navigation.Screen
 import com.aleaatapasya0002.cakecatalogue.ui.theme.CakeCatalogueTheme
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen() {
+fun MainScreen(navController: NavHostController) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -51,7 +54,9 @@ fun MainScreen() {
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = {}
+                onClick = {
+                    navController.navigate(Screen.FormBaru.route)
+                }
             ) {
                 Icon(
                     imageVector = Icons.Filled.Add,
@@ -114,6 +119,6 @@ fun ListItem(daftar: Daftar){
 @Composable
 fun MainScreenPreview() {
     CakeCatalogueTheme {
-        MainScreen()
+        MainScreen(rememberNavController())
     }
 }

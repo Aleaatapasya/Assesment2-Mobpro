@@ -3,4 +3,6 @@
     <string name="app_name">Katalog Kue</string>
     <string name="list_kosong">Belum ada data</string>
     <string name="tambah_daftar">Tambah Daftar</string>
+    <string name="nama_kue">Nama kue</string>
+    <string name="isi_daftar">Isi Daftar</string>
 </resources>

@@ -20,4 +20,7 @@ interface DaftarDao {
 
     @Query("SELECT * FROM daftar WHERE id = :id")
     suspend fun getDaftarById(id: Long):Daftar?
+
+    @Query("DELETE FROM daftar WHERE id = :id")
+    suspend fun deleteById(id: Long)
 }

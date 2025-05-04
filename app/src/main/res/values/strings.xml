@@ -8,4 +8,6 @@
     <string name="simpan">Save</string>
     <string name="edit_daftar">Edit list</string>
     <string name="invalid">Cake name and description cannot be empty</string>
+    <string name="lainnya">Options</string>
+    <string name="hapus">Delete list</string>
 </resources>

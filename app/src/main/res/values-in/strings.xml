@@ -2,4 +2,5 @@
 <resources>
     <string name="app_name">Katalog Kue</string>
     <string name="list_kosong">Belum ada data</string>
+    <string name="tambah_daftar">Tambah Daftar</string>
 </resources>

@@ -3,8 +3,9 @@
     <string name="list_kosong">No data yet</string>
     <string name="tambah_daftar">Add list</string>
     <string name="nama_kue">Cake name</string>
-    <string name="isi_daftar">Fill in the list</string>
+    <string name="isi_daftar">Description</string>
     <string name="kembali">Back</string>
     <string name="simpan">Save</string>
     <string name="edit_daftar">Edit list</string>
+    <string name="invalid">Cake name and description cannot be empty</string>
 </resources>

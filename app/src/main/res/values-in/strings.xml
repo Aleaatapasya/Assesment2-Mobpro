@@ -4,8 +4,9 @@
     <string name="list_kosong">Belum ada data</string>
     <string name="tambah_daftar">Tambah Daftar</string>
     <string name="nama_kue">Nama kue</string>
-    <string name="isi_daftar">Isi Daftar</string>
+    <string name="isi_daftar">Deskripsi</string>
     <string name="kembali">Kembali</string>
     <string name="simpan">Simpan</string>
     <string name="edit_daftar">Ubah Daftar</string>
+    <string name="invalid">Nama kue dan deskripsi tidak boleh kosong</string>
 </resources>

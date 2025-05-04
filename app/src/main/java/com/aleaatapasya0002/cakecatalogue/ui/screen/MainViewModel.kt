@@ -14,7 +14,4 @@ class MainViewModel(dao: DaftarDao) : ViewModel(){
         started = SharingStarted.WhileSubscribed(),
         initialValue = emptyList()
     )
-    fun getDaftar(id: Long):Daftar? {
-        return data.value.find { it.id == id }
-    }
 }

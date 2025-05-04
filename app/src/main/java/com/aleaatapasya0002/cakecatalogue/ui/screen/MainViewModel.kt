@@ -1,8 +1,9 @@
 package com.aleaatapasya0002.cakecatalogue.ui.screen
 
+import androidx.lifecycle.ViewModel
 import com.aleaatapasya0002.cakecatalogue.model.Daftar
 
-class MainViewModel {
+class MainViewModel : ViewModel() {
     val data = listOf(
         Daftar(
             1,

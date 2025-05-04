@@ -20,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,6 +31,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.aleaatapasya0002.cakecatalogue.R
@@ -39,8 +41,18 @@ const val KEY_ID_DAFTAR = "idDaftar"
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailScreen(navController: NavHostController, id: Long? = null) {
-    var judul by remember { mutableStateOf("") }
-    var daftar by remember { mutableStateOf("") }
+    val viewModel: MainViewModel = viewModel()
+
+    var namaKue by remember { mutableStateOf("") }
+    var deskripsi by remember { mutableStateOf("") }
+
+    LaunchedEffect(Unit) {
+        if (id == null) return@LaunchedEffect
+        val data = viewModel.getDaftar(id) ?: return@LaunchedEffect
+        namaKue = data.namaKue
+        deskripsi = data.deskripsi
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -76,10 +88,10 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
         }
     ) { padding ->
         FormDaftar(
-            tittle = judul,
-            onTitleChange = {judul = it},
-            desc = daftar,
-            onDescChange = {daftar = it},
+            tittle = namaKue,
+            onTitleChange = {namaKue = it},
+            desc = deskripsi,
+            onDescChange = {deskripsi = it},
             modifier = Modifier.padding(padding)
         )
     }

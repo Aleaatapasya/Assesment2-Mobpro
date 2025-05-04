@@ -30,6 +30,10 @@ class MainViewModel : ViewModel() {
             6,
             "Pink Choco Donuts",
             "Donat lembut berlapis cokelat pink manis dengan taburan yang menggoda di atasnya"
-        ),
+        )
     )
+
+        fun getDaftar(id:Long): Daftar? {
+            return data.find {it.id == id}
+        }
 }

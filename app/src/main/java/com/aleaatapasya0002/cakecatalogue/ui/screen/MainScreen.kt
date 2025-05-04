@@ -32,9 +32,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -51,13 +48,18 @@ import com.aleaatapasya0002.cakecatalogue.R
 import com.aleaatapasya0002.cakecatalogue.model.Daftar
 import com.aleaatapasya0002.cakecatalogue.navigation.Screen
 import com.aleaatapasya0002.cakecatalogue.ui.theme.CakeCatalogueTheme
+import com.aleaatapasya0002.cakecatalogue.util.SettingsDataStore
 import com.aleaatapasya0002.cakecatalogue.util.ViewModelFactory
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(navController: NavHostController) {
-    var showList by remember { mutableStateOf(true) }
+    val dataStore = SettingsDataStore(LocalContext.current)
+    val showList by dataStore.layoutFlow.collectAsState(true)
     Scaffold(
         topBar = {
             TopAppBar(
@@ -69,7 +71,12 @@ fun MainScreen(navController: NavHostController) {
                     titleContentColor = MaterialTheme.colorScheme.primary,
                 ),
                 actions = {
-                    IconButton(onClick = {showList = !showList}) {
+                    IconButton(
+                        onClick = {
+                            CoroutineScope(Dispatchers.IO).launch {
+                                dataStore.saveLayout(!showList)
+                            }
+                        }){
                         Icon(
                             painter = painterResource(
                                 if(showList) R.drawable.baseline_grid_view_24

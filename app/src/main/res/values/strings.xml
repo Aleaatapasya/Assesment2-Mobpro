@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Cake Catalogue</string>
+    <string name="list_kosong">No data yet</string>
 </resources>

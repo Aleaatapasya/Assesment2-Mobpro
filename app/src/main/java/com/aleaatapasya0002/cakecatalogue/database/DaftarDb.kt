@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.aleaatapasya0002.cakecatalogue.model.Daftar
 
-@Database(entities = [Daftar::class], version = 1, exportSchema = false)
+@Database(entities = [Daftar::class], version = 2, exportSchema = false)
 abstract class DaftarDb : RoomDatabase(){
 
     abstract val dao: DaftarDao
@@ -17,13 +17,13 @@ abstract class DaftarDb : RoomDatabase(){
         fun getInstance(context: Context): DaftarDb{
             kotlin.synchronized(this) {
                 var instance = INSTANCE
-
                 if (instance == null) {
                     instance = Room.databaseBuilder(
                         context.applicationContext,
                         DaftarDb::class.java,
                         "daftar.db"
-                    ).build()
+                    ).fallbackToDestructiveMigration()
+                        .build()
                     INSTANCE = instance
                 }
                 return instance

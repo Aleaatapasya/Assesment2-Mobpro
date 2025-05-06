@@ -34,6 +34,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -53,6 +54,7 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
 
     var namaKue by remember { mutableStateOf("") }
     var deskripsi by remember { mutableStateOf("") }
+    var harga by remember { mutableStateOf("") }
     var showDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
@@ -60,6 +62,7 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
         val data = viewModel.getDaftar(id) ?: return@LaunchedEffect
         namaKue = data.namaKue
         deskripsi = data.deskripsi
+        harga = data.harga.toString()
     }
 
     Scaffold(
@@ -86,14 +89,14 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
                 ),
                 actions = {
                     IconButton(onClick = {
-                        if (namaKue == "" || deskripsi == ""){
+                        if (namaKue == "" || deskripsi == "" || harga == ""){
                             Toast.makeText(context, R.string.invalid, Toast.LENGTH_LONG).show()
                             return@IconButton
                         }
                         if (id == null){
-                            viewModel.insert(namaKue, deskripsi)
+                            viewModel.insert(namaKue, deskripsi, harga.toInt())
                         } else {
-                            viewModel.update(id, namaKue, deskripsi)
+                            viewModel.update(id, namaKue, deskripsi, harga.toInt())
                         }
                         navController.popBackStack()
                     }) {
@@ -117,6 +120,8 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
             onTitleChange = {namaKue = it},
             desc = deskripsi,
             onDescChange = {deskripsi = it},
+            harga = harga,
+            onHargaChange = {harga = it},
             modifier = Modifier.padding(padding)
         )
         if (id !== null && showDialog){
@@ -135,6 +140,7 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
 fun FormDaftar(
     tittle: String, onTitleChange: (String) -> Unit,
     desc: String, onDescChange: (String) -> Unit,
+    harga: String, onHargaChange: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -160,7 +166,18 @@ fun FormDaftar(
             label = { Text(text = stringResource(R.string.isi_daftar)) },
             singleLine = true,
             keyboardOptions = KeyboardOptions(
-                capitalization = KeyboardCapitalization.Sentences,
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Done
+            ),
+            modifier = Modifier.fillMaxWidth()
+        )
+        OutlinedTextField(
+            value = harga,
+            onValueChange = { onHargaChange(it)},
+            label = { Text(text = stringResource(R.string.harga)) },
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Done
             ),
             modifier = Modifier.fillMaxWidth()

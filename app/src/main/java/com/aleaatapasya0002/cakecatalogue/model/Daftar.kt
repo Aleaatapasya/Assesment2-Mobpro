@@ -8,5 +8,6 @@ data class Daftar(
     @PrimaryKey(autoGenerate = true)
     val id: Long= 0L,
     val namaKue: String,
-    val deskripsi: String
+    val deskripsi: String,
+    val harga: Int = 0
 )

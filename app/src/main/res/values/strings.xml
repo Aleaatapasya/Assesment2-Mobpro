@@ -15,4 +15,6 @@
     <string name="tombol_batal">Cancel</string>
     <string name="list">List view</string>
     <string name="grid">Grid view</string>
+    <string name="tentang_aplikasi">About Screen</string>
+    <string name="copyright">Cake Catalogue is an Android application that function to make it easier for users to see prices and cake products in a store. So this application contains a catalog that list prices and cake products. \\n\nThis application was created for Assesment 2 of Mobile Programming 1 class. \n\nCopyright © 2025– 2026 Alea Atapasya. \nAll rights reserved</string>
 </resources>

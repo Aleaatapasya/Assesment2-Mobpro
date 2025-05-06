@@ -16,4 +16,6 @@
     <string name="tombol_batal">Batal</string>
     <string name="list">Tampilan list</string>
     <string name="grid">Tampilan grid</string>
+    <string name="tentang_aplikasi">Tentang Aplikasi</string>
+    <string name="copyright">Cake Catalogue merupakan sebuah aplikasi Android yang berfungsi untuk memudahkan pengguna dalam melihat harga dan produk kue yang ada di sebuah toko. Jadi aplikasi ini berisi katalog yang mencantumkan tentang harga dan produk kue. \n\nAplikasi ini dibuat untuk Assesment 2 kelas Pemrograman untuk Perangkat Bergerak 1. \n\nCopyright © 2025 – 2026 Alea Atapasya. \nAll rights reserved</string>
 </resources>

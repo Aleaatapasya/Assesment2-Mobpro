@@ -16,9 +16,13 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DividerDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
@@ -32,6 +36,9 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -88,6 +95,9 @@ fun MainScreen(navController: NavHostController) {
                             ),
                             tint = MaterialTheme.colorScheme.primary
                         )
+                    }
+                    MoreAction {
+                        navController.navigate(Screen.About.route)
                     }
                 }
             )
@@ -206,7 +216,38 @@ fun GridItem(daftar: Daftar, onClick: () -> Unit) {
             )
         }
     }
-
+}
+@Composable
+fun MoreAction(onAboutclick: () -> Unit){
+    var expanded by remember { mutableStateOf(false) }
+    IconButton(onClick = {expanded = true}) {
+        Icon(
+            imageVector = Icons.Filled.MoreVert,
+            contentDescription = stringResource(R.string.tentang_aplikasi),
+            tint = MaterialTheme.colorScheme.primary
+        )
+    }
+    DropdownMenu(
+        expanded = expanded,
+        onDismissRequest = {expanded = false}
+    ) {
+        DropdownMenuItem(
+            text = {
+                Text(text = stringResource(id = R.string.tentang_aplikasi))
+            },
+            onClick = {
+                expanded = false
+                onAboutclick()
+                },
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Outlined.Info,
+                    contentDescription = stringResource(R.string.tentang_aplikasi),
+                    tint = MaterialTheme.colorScheme.primary
+                )
+            }
+        )
+    }
 }
 @Preview(showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)

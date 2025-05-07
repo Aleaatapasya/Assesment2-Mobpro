@@ -21,4 +21,12 @@
     <string name="snackbar">Show Snackbar</string>
     <string name="dihapus">Item deleted</string>
     <string name="undo">Undo</string>
+    <string name="tema">Theme</string>
+    <string name="pink">Pink</string>
+    <string name="yellow">Yellow</string>
+    <string name="green">Green</string>
+    <string name="blue">Blue</string>
+    <string name="cari">Search</string>
+    <string name="close">Close</string>
+    <string name="history">History</string>
 </resources>

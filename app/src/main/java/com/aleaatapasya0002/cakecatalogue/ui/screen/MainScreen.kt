@@ -16,8 +16,8 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DividerDefaults
@@ -30,12 +30,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -67,6 +69,10 @@ import kotlinx.coroutines.launch
 fun MainScreen(navController: NavHostController) {
     val dataStore = SettingsDataStore(LocalContext.current)
     val showList by dataStore.layoutFlow.collectAsState(true)
+    var text by remember { mutableStateOf("") }
+    var active by remember { mutableStateOf(false) }
+    val searchHistory = remember { mutableStateListOf<String>() }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -96,8 +102,7 @@ fun MainScreen(navController: NavHostController) {
                             tint = MaterialTheme.colorScheme.primary
                         )
                     }
-                    MoreAction {
-                        navController.navigate(Screen.About.route)
+                    TemaWarna {
                     }
                 }
             )
@@ -115,19 +120,82 @@ fun MainScreen(navController: NavHostController) {
                 )
             }
         }
-    ) { innerPadding ->
-        ScreenContent(showList, Modifier.padding(innerPadding), navController)
+    ) {
+        innerPadding ->
+            Column(modifier = Modifier.padding(innerPadding)) {
+                SearchBar(
+                    query = text,
+                    onQueryChange = { text = it },
+                    onSearch = {
+                        active = false
+                        if (text.isNotBlank() && !searchHistory.contains(text)){
+                            searchHistory.add(0, text)
+                                    }
+                               },
+                    active = active,
+                    onActiveChange = { active = it },
+                    placeholder = {
+                        Text(text = stringResource(R.string.cari))
+                    },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = stringResource(R.string.cari)
+                        )
+                    },
+                    trailingIcon = {
+                        if (active){
+                            Icon(
+                                modifier = Modifier.clickable {
+                                    if (text.isNotEmpty()){
+                                        text = ""
+                                    } else{
+                                        active = false
+                                    }
+                            },
+                                imageVector = Icons.Default.Close,
+                                contentDescription = stringResource(R.string.close))
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                ) {
+                    if (active && searchHistory.isNotEmpty()) {
+                        Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+                            Text(text = stringResource(R.string.history), fontWeight = FontWeight.Bold)
+                            searchHistory.forEach { item ->
+                                Text(
+                                    text = item,
+                                    modifier = Modifier
+                                        .clickable {
+                                            text = item
+                                            active = false
+                                        }
+                                        .padding(vertical = 4.dp)
+                                )
+                            }
+                        }
+                    }
+                }
+                ScreenContent(showList, modifier = Modifier.fillMaxSize(), navController, text)
+            }
+        }
     }
-}
+
 
 @Composable
-fun ScreenContent(showList: Boolean, modifier: Modifier = Modifier, navController: NavHostController) {
+fun ScreenContent(showList: Boolean, modifier: Modifier = Modifier, navController: NavHostController, query: String) {
     val context = LocalContext.current
     val factory = ViewModelFactory(context)
     val viewModel: MainViewModel = viewModel(factory = factory)
     val data by viewModel.data.collectAsState()
 
-    if (data.isEmpty()) {
+    val filteredData = if (query.isEmpty()) data else data.filter {
+        it.namaKue.contains(query, ignoreCase = true)
+    }
+
+    if (filteredData.isEmpty()) {
         Column(
             modifier = modifier
                 .fillMaxSize()
@@ -143,15 +211,14 @@ fun ScreenContent(showList: Boolean, modifier: Modifier = Modifier, navControlle
                 modifier = modifier.fillMaxSize(),
                 contentPadding = PaddingValues(bottom = 84.dp)
             ) {
-                items(data) {
+                items(filteredData) {
                     ListItem(daftar = it) {
                         navController.navigate(Screen.FormUbah.withId(it.id))
                     }
                     HorizontalDivider()
                 }
             }
-        }
-        else {
+        } else {
             LazyVerticalStaggeredGrid(
                 modifier = modifier.fillMaxSize(),
                 columns = StaggeredGridCells.Fixed(2),
@@ -159,7 +226,7 @@ fun ScreenContent(showList: Boolean, modifier: Modifier = Modifier, navControlle
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 contentPadding = PaddingValues(8.dp, 8.dp, 8.dp, 84.dp)
             ) {
-                items(data){
+                items(filteredData) {
                     GridItem(daftar = it) {
                         navController.navigate(Screen.FormUbah.withId(it.id))
                     }
@@ -168,6 +235,7 @@ fun ScreenContent(showList: Boolean, modifier: Modifier = Modifier, navControlle
         }
     }
 }
+
 
 @Composable
 fun ListItem(daftar: Daftar, onClick: () -> Unit){
@@ -227,12 +295,12 @@ fun GridItem(daftar: Daftar, onClick: () -> Unit) {
     }
 }
 @Composable
-fun MoreAction(onAboutclick: () -> Unit){
+fun TemaWarna(onAboutclick: () -> Unit){
     var expanded by remember { mutableStateOf(false) }
     IconButton(onClick = {expanded = true}) {
         Icon(
-            imageVector = Icons.Filled.MoreVert,
-            contentDescription = stringResource(R.string.tentang_aplikasi),
+            painter = painterResource(R.drawable.baseline_color_lens_24),
+            contentDescription = stringResource(R.string.lainnya),
             tint = MaterialTheme.colorScheme.primary
         )
     }
@@ -242,19 +310,39 @@ fun MoreAction(onAboutclick: () -> Unit){
     ) {
         DropdownMenuItem(
             text = {
-                Text(text = stringResource(id = R.string.tentang_aplikasi))
+                Text(text = stringResource(id = R.string.pink))
             },
             onClick = {
                 expanded = false
                 onAboutclick()
-                },
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Outlined.Info,
-                    contentDescription = stringResource(R.string.tentang_aplikasi),
-                    tint = MaterialTheme.colorScheme.primary
-                )
-            }
+            },
+        )
+        DropdownMenuItem(
+            text = {
+                Text(text = stringResource(id = R.string.yellow))
+            },
+            onClick = {
+                expanded = false
+                onAboutclick()
+            },
+        )
+        DropdownMenuItem(
+            text = {
+                Text(text = stringResource(id = R.string.green))
+            },
+            onClick = {
+                expanded = false
+                onAboutclick()
+            },
+        )
+        DropdownMenuItem(
+            text = {
+                Text(text = stringResource(id = R.string.blue))
+            },
+            onClick = {
+                expanded = false
+                onAboutclick()
+            },
         )
     }
 }

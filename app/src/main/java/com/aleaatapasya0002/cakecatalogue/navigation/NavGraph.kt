@@ -7,7 +7,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.aleaatapasya0002.cakecatalogue.ui.screen.AboutScreen
 import com.aleaatapasya0002.cakecatalogue.ui.screen.DetailScreen
 import com.aleaatapasya0002.cakecatalogue.ui.screen.KEY_ID_DAFTAR
 import com.aleaatapasya0002.cakecatalogue.ui.screen.MainScreen
@@ -20,9 +19,6 @@ fun SetupNavGraph(navController: NavHostController = rememberNavController()) {
     ){
         composable(route = Screen.Home.route){
             MainScreen(navController)
-        }
-        composable(route = Screen.About.route){
-            AboutScreen(navController)
         }
         composable(route = Screen.FormBaru.route){
             DetailScreen(navController)

@@ -20,6 +20,10 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -41,8 +45,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.aleaatapasya0002.cakecatalogue.R
+import com.aleaatapasya0002.cakecatalogue.model.Daftar
 import com.aleaatapasya0002.cakecatalogue.ui.theme.CakeCatalogueTheme
 import com.aleaatapasya0002.cakecatalogue.util.ViewModelFactory
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 const val KEY_ID_DAFTAR = "idDaftar"
 @OptIn(ExperimentalMaterial3Api::class)
@@ -56,6 +65,8 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
     var deskripsi by remember { mutableStateOf("") }
     var harga by remember { mutableStateOf("") }
     var showDialog by remember { mutableStateOf(false) }
+    val snackbarHostState = remember { SnackbarHostState() }
+    val deletedItem by remember { mutableStateOf<Daftar?>(null) }
 
     LaunchedEffect(Unit) {
         if (id == null) return@LaunchedEffect
@@ -70,7 +81,8 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
             TopAppBar(
                 navigationIcon = {
                     IconButton(onClick = {navController.popBackStack()}) {
-                        Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = stringResource(R.string.kembali),
                             tint = MaterialTheme.colorScheme.primary
                         )
@@ -113,6 +125,9 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
                     }
                 }
             )
+        },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
         }
     ) { padding ->
         FormDaftar(
@@ -125,13 +140,34 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
             modifier = Modifier.padding(padding)
         )
         if (id !== null && showDialog){
-
             DisplayAlertDialog(
-                onDismissRequest = {showDialog = false}) {
-                showDialog = false
-                viewModel.delete(id)
-                navController.popBackStack()
-            }
+                onDismissRequest = {showDialog = false},
+                onConfirmation = {
+                    showDialog = false
+                    CoroutineScope(Dispatchers.IO).launch {
+                        val data = viewModel.getDaftar(id)
+                        if (data != null) {
+                            viewModel.delete(id)
+
+                            withContext(Dispatchers.Main){
+                                navController.popBackStack()
+
+                                val result = snackbarHostState.showSnackbar(
+                                    message = context.getString(R.string.dihapus),
+                                    actionLabel = context.getString(R.string.undo),
+                                    duration = SnackbarDuration.Indefinite
+                                )
+                                if (result == SnackbarResult.ActionPerformed){
+                                    deletedItem?.let {
+                                        viewModel.insertDaftar(it)
+                                    }
+                                }
+                                navController.popBackStack()
+                            }
+                        }
+                    }
+                }
+            )
         }
     }
 }
@@ -167,7 +203,7 @@ fun FormDaftar(
             singleLine = true,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Done
+                imeAction = ImeAction.Next
             ),
             modifier = Modifier.fillMaxWidth()
         )
@@ -210,6 +246,7 @@ fun DeleteAction(delete: () -> Unit){
         }
     }
 }
+
 @Preview(showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable

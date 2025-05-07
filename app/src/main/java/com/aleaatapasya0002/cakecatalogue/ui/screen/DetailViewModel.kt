@@ -18,8 +18,11 @@ class DetailViewModel(private val dao: DaftarDao) : ViewModel() {
             dao.insert(daftar)
         }
     }
-    suspend fun getDaftar(id: Long):Daftar? {
-        return dao.getDaftarById(id)
+
+    fun insertDaftar(daftar: Daftar){
+        viewModelScope.launch(Dispatchers.IO){
+            dao.insert(daftar)
+        }
     }
 
     fun update(id: Long, namaKue: String, deskripsi: String, harga: Int){
@@ -38,6 +41,10 @@ class DetailViewModel(private val dao: DaftarDao) : ViewModel() {
         viewModelScope.launch(Dispatchers.IO){
             dao.deleteById(id)
         }
+    }
+
+    suspend fun getDaftar(id: Long):Daftar? {
+        return dao.getDaftarById(id)
     }
 
 }

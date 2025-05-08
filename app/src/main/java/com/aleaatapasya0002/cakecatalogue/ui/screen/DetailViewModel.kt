@@ -19,12 +19,6 @@ class DetailViewModel(private val dao: DaftarDao) : ViewModel() {
         }
     }
 
-    fun insertDaftar(daftar: Daftar){
-        viewModelScope.launch(Dispatchers.IO){
-            dao.insert(daftar)
-        }
-    }
-
     fun update(id: Long, namaKue: String, deskripsi: String, harga: Int){
         val daftar = Daftar(
             id = id,

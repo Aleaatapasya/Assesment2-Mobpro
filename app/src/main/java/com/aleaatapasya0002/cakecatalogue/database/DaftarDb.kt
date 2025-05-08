@@ -15,14 +15,14 @@ abstract class DaftarDb : RoomDatabase(){
         @Volatile
         private var INSTANCE: DaftarDb? = null
         fun getInstance(context: Context): DaftarDb{
-            kotlin.synchronized(this) {
+            synchronized(this) {
                 var instance = INSTANCE
                 if (instance == null) {
                     instance = Room.databaseBuilder(
                         context.applicationContext,
                         DaftarDb::class.java,
                         "daftar.db"
-                    ).fallbackToDestructiveMigration()
+                    )
                         .build()
                     INSTANCE = instance
                 }

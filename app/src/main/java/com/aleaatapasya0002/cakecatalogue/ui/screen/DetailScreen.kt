@@ -20,10 +20,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -45,7 +41,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.aleaatapasya0002.cakecatalogue.R
-import com.aleaatapasya0002.cakecatalogue.model.Daftar
 import com.aleaatapasya0002.cakecatalogue.ui.theme.CakeCatalogueTheme
 import com.aleaatapasya0002.cakecatalogue.util.ViewModelFactory
 import kotlinx.coroutines.CoroutineScope
@@ -65,8 +60,6 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
     var deskripsi by remember { mutableStateOf("") }
     var harga by remember { mutableStateOf("") }
     var showDialog by remember { mutableStateOf(false) }
-    val snackbarHostState = remember { SnackbarHostState() }
-    val deletedItem by remember { mutableStateOf<Daftar?>(null) }
 
     LaunchedEffect(Unit) {
         if (id == null) return@LaunchedEffect
@@ -126,9 +119,6 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
                 }
             )
         },
-        snackbarHost = {
-            SnackbarHost(hostState = snackbarHostState)
-        }
     ) { padding ->
         FormDaftar(
             tittle = namaKue,
@@ -145,27 +135,11 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
                 onConfirmation = {
                     showDialog = false
                     CoroutineScope(Dispatchers.IO).launch {
-                        val data = viewModel.getDaftar(id)
-                        if (data != null) {
                             viewModel.delete(id)
-
                             withContext(Dispatchers.Main){
-                                navController.popBackStack()
-
-                                val result = snackbarHostState.showSnackbar(
-                                    message = context.getString(R.string.dihapus),
-                                    actionLabel = context.getString(R.string.undo),
-                                    duration = SnackbarDuration.Indefinite
-                                )
-                                if (result == SnackbarResult.ActionPerformed){
-                                    deletedItem?.let {
-                                        viewModel.insertDaftar(it)
-                                    }
-                                }
                                 navController.popBackStack()
                             }
                         }
-                    }
                 }
             )
         }

@@ -1,6 +1,5 @@
 package com.aleaatapasya0002.cakecatalogue.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

@@ -261,10 +261,6 @@ fun ListItem(daftar: Daftar, onClick: () -> Unit){
             maxLines = 2,
             overflow = TextOverflow.Ellipsis
         )
-        Text(text = daftar.harga.toString(),
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
     }
 }
 
@@ -290,11 +286,6 @@ fun GridItem(daftar: Daftar, onClick: () -> Unit) {
             Text(
                 text = daftar.deskripsi,
                 maxLines = 3,
-                overflow = TextOverflow.Ellipsis
-            )
-            Text(
-                text = daftar.harga.toString(),
-                maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
         }

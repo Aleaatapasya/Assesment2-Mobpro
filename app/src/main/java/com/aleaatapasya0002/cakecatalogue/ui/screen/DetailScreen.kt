@@ -58,7 +58,6 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
 
     var namaKue by remember { mutableStateOf("") }
     var deskripsi by remember { mutableStateOf("") }
-    var harga by remember { mutableStateOf("") }
     var showDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
@@ -66,7 +65,6 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
         val data = viewModel.getDaftar(id) ?: return@LaunchedEffect
         namaKue = data.namaKue
         deskripsi = data.deskripsi
-        harga = data.harga.toString()
     }
 
     Scaffold(
@@ -94,14 +92,14 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
                 ),
                 actions = {
                     IconButton(onClick = {
-                        if (namaKue == "" || deskripsi == "" || harga == ""){
+                        if (namaKue == "" || deskripsi == ""){
                             Toast.makeText(context, R.string.invalid, Toast.LENGTH_LONG).show()
                             return@IconButton
                         }
                         if (id == null){
-                            viewModel.insert(namaKue, deskripsi, harga.toInt())
+                            viewModel.insert(namaKue, deskripsi)
                         } else {
-                            viewModel.update(id, namaKue, deskripsi, harga.toInt())
+                            viewModel.update(id, namaKue, deskripsi)
                         }
                         navController.popBackStack()
                     }) {
@@ -125,8 +123,6 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
             onTitleChange = {namaKue = it},
             desc = deskripsi,
             onDescChange = {deskripsi = it},
-            harga = harga,
-            onHargaChange = {harga = it},
             modifier = Modifier.padding(padding)
         )
         if (id !== null && showDialog){
@@ -150,7 +146,6 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
 fun FormDaftar(
     tittle: String, onTitleChange: (String) -> Unit,
     desc: String, onDescChange: (String) -> Unit,
-    harga: String, onHargaChange: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -178,17 +173,6 @@ fun FormDaftar(
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
                 imeAction = ImeAction.Next
-            ),
-            modifier = Modifier.fillMaxWidth()
-        )
-        OutlinedTextField(
-            value = harga,
-            onValueChange = { onHargaChange(it)},
-            label = { Text(text = stringResource(R.string.harga)) },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Number,
-                imeAction = ImeAction.Done
             ),
             modifier = Modifier.fillMaxWidth()
         )

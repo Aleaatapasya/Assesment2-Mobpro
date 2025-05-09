@@ -8,23 +8,21 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class DetailViewModel(private val dao: DaftarDao) : ViewModel() {
-    fun insert(namaKue: String, deskripsi:String, harga:Int){
+    fun insert(namaKue: String, deskripsi:String){
         val daftar = Daftar(
             namaKue = namaKue,
-            deskripsi = deskripsi,
-            harga = harga
+            deskripsi = deskripsi
         )
         viewModelScope.launch(Dispatchers.IO) {
             dao.insert(daftar)
         }
     }
 
-    fun update(id: Long, namaKue: String, deskripsi: String, harga: Int){
+    fun update(id: Long, namaKue: String, deskripsi: String){
         val daftar = Daftar(
             id = id,
             namaKue = namaKue,
-            deskripsi = deskripsi,
-            harga = harga
+            deskripsi = deskripsi
         )
         viewModelScope.launch(Dispatchers.IO){
             dao.update(daftar)

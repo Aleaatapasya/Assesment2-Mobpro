@@ -17,8 +17,8 @@
     <string name="list">Tampilan list</string>
     <string name="grid">Tampilan grid</string>
     <string name="tentang_aplikasi">Tentang Aplikasi</string>
-    <string name="copyright">Katalog Kue merupakan aplikasi Android yang berfungsi untuk memudahkan pengguna dalam melihat harga dan produk kue di suatu toko. Jadi aplikasi ini berisi katalog yang berisi daftar harga dan produk kue. \n\nAplikasi ini dibuat untuk Asesmen 2 kelas Mobile Programming 1. \n\nHak Cipta © 2025– 2026 Alea Atapasya. \nAll rights reserved</string>
-   <string name="harga">Harga</string>
+    <string name="copyright">Katalog Kue merupakan aplikasi Android yang berfungsi untuk memudahkan pengguna dalam melihat nama produk dan deskripsi produk di suatu toko. Jadi aplikasi ini berisi katalog yang menampilkan nama dan deskripsi produk. \n\nAplikasi ini dibuat untuk Asesmen 2 kelas Mobile Programming 1. \n\nHak Cipta © 2025– 2026 Alea Atapasya. \nAll rights reserved</string>
+   <string name="jenis">Jenis Kue</string>
     <string name="cari">Cari</string>
     <string name="close">Tutup</string>
     <string name="history">Riwayat</string>
